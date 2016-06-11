@@ -75,7 +75,8 @@ function doExecute() {
       username: 'user' + i,
       email: 'user' + i + '@example.com', 
       display_name: u.getRandomElement(firstNames) + ' ' + u.getRandomElement(lastNames),
-      password: '1234'
+      password: '1234',
+      email_activated: 1
     }).save().then(updateUserID);
   }
 }

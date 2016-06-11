@@ -8,4 +8,4 @@
 ###
 knex:
   connection:
-    password : ""
+    password : "root"
