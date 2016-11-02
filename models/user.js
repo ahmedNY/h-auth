@@ -49,15 +49,21 @@ module.exports = bookshelf.Model.extend({
   //returns found user
   login: Promise.method(function(params) {
 
-    if ((!params.email && !params.username) || !params.password) {
-      l.error('Email / Username and Password are both required for login');
-      throw new Error('Email / Username and password are both required');
+    if (!params.email && !params.username) {
+      l.error('User.login: Email Or Username is required');
+      throw new Error('User.login: Email Or Username is required');
+    }
+
+    if (!params.password) {
+      l.error('User.login: Password is required');
+      throw new Error('User.login: Password is required');
     }
 
     whereClause = _.pick(params, ['username', 'email']);
     whereClause.email_activated = 1;
 
-    return this.forge(whereClause).fetch()
+    return this.forge(whereClause)
+    .fetch()
     .then(function(foundUser) {
       if(foundUser){
         l.info('User Found');
@@ -74,6 +80,16 @@ module.exports = bookshelf.Model.extend({
         l.warn('User Not Found');
         throw new Error('User not found');
       }
+    });
+  }),
+
+  getAvailablePermissions: Promise.method(function(user_id){
+    return bookshelf.knex.select('*').from('v_user_permissions').where('user_id',user_id).then(function(permissions){
+      return permissions;
+    }).catch(function(err){
+      l.error(err);
+      l.warn('User.login: Error during retreiving user permissions');
+      throw new Error('User.login: Error during retreiving user permissions');
     });
   }),
 
