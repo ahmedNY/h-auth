@@ -36,17 +36,17 @@ module.exports = new(winston.Logger)({
       json: false,
       colorize: true,
     }),
-    new(winston.transports.File)({
-      handleExceptions: true,
-      level: 'debug',
-      json: false,
-      colorize: false,
-      tailable: true,
-      timestamp: tsFormat,
-      filename: path.resolve(config.get('logging.directory'), 'auth.log'),
-      maxsize: 5242880, //5MB
-      maxFiles: 10,
-      prettyPrint: true
-    })
+    // new(winston.transports.File)({
+    //   handleExceptions: true,
+    //   level: 'debug',
+    //   json: false,
+    //   colorize: false,
+    //   tailable: true,
+    //   timestamp: tsFormat,
+    //   filename: path.resolve(config.get('logging.directory'), 'auth.log'),
+    //   maxsize: 5242880, //5MB
+    //   maxFiles: 10,
+    //   prettyPrint: true
+    // })
   ]
 });
