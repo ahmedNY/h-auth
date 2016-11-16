@@ -42,8 +42,6 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.integer('user_id').unsigned().references('um_user.id');
       table.integer('role_id').unsigned().references('um_role.id');
-      table.string('resource');
-      table.integer('resource_id').unsigned();
       table.string('context');
       table.integer('context_id').unsigned();
     });
