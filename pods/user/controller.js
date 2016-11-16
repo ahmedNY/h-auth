@@ -114,10 +114,22 @@ module.exports = [{
             [args.user_id, args.action, args.resource, args.context, args.context_id])
             .then(function(records){
                 l.info('Permission Record:', records[0]);
-                var results = {answer: records[0].length > 0}
+                var results = {answer: records[0].length > 0};
                 l.info('Sending Results', results);
                 callback(null, results);
             });
-
+        }
+    }, {
+        pattern: { role: config.role, model: config.model, cmd: 'getGroupUsers' },
+        action: function (args, callback) {
+            //This query gets all users with roles related to a group
+            return bookshelf.knex.select('*')
+                .from('v_user_roles')
+                .where('badge_context', 'group')
+                .andWhere('badge_context_id',args.group_id || 0)
+                .then(function(records){
+                    var results = { records: _.values(records) };
+                    callback(null, results);
+                });
         }
     }];
