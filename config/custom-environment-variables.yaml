@@ -1,0 +1,4 @@
+knex:
+  connection:
+    user : "NODE_CONFIG_DB_USER"
+    password : "NODE_CONFIG_DB_PASSWORD"
