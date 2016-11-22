@@ -97,24 +97,31 @@ module.exports = [{
             //  args.user_id
             //  args.action
             //  args.resource
+            //optional args:
             //  args.context
             //  args.context_id
+            
             l.info('Checking permission for user:', {user_id: args.user_id, action: args.action, resource: args.resource, context: args.context, context_id: args.context_id});
-            bookshelf.knex.raw("SELECT \
-                u.id as user_id, u.username, u.display_name, \
-                r.id as role_id, r.role_name, \
-                b.context badge_context, b.context_id as badge_context_id, \
-                p.action permissin_action, p.resource permission_resource, p.context permission_context \
-            FROM um_user u \
-            JOIN um_badge b on u.id = b.user_id \
-            JOIN um_role r on b.role_id = r.id \
-            JOIN um_role_permission rp on rp.role_id = r.id \
-            JOIN um_permission p on p.id = rp.permission_id \
-            WHERE u.id = ? AND p.`action`=? AND p.resource=? AND b.context = ? AND b.context_id = ?",
-            [args.user_id, args.action, args.resource, args.context, args.context_id])
-            .then(function(records){
+            
+            var qb = bookshelf.knex
+            .from('v_user_permissions')
+            .where ('user_id',args.user_id)
+            .where ('permission_action',args.action)
+            .where ('permission_resource',args.resource);
+            
+            //check if context is in args
+            if(args.context) {
+                qb.where('badge_context', args.context);
+            }
+
+            //check if context_id is in args
+            if(args.context_id){
+                qb.where('badge_context_id', args.context_id);
+            }
+
+            qb.then(function(records){
                 l.info('Permission Record:', records[0]);
-                var results = {answer: records[0].length > 0};
+                var results = {answer: records.length > 0};
                 l.info('Sending Results', results);
                 callback(null, results);
             });
