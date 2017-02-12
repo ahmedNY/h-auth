@@ -44,3 +44,6 @@ seneca:
 ###
 logging:
   directory: "./logs"
+
+session:
+  timeout: 302400 # one week

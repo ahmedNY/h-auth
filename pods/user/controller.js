@@ -1,8 +1,6 @@
 var bookshelf = require('../../bookshelf');
 var Models = require('../../models');
 var config = require('./config');
-var l = require('../../logger');
-var _ = require('lodash');
 
 //find the record with the email
 //update the record with user info
@@ -33,13 +31,14 @@ module.exports = [{
             // console.log(args.data);
             // console.log(record);
             
-            record.set('facebook_activated', 1);
             if(args.data.facebook_id) {
                 record.set('facebook_id', args.data.facebook_id);
+                record.set('facebook_activated', 1);
             }
     
             if(args.data.google_id) {
                 record.set('google_id', args.data.google_id);
+                record.set('google_activated', 1);
             }
     
             if(args.data.email) {
@@ -54,6 +53,8 @@ module.exports = [{
                 record.set('display_name', args.data.display_name);
             }
         
+            record.set('email_activated', 1);
+
             if(record.hasChanged()){
                 l.info('Saving user data to db: ' + args.data.email);
                 return record.save();
@@ -74,7 +75,6 @@ module.exports = [{
                 tray.user = foundUser.toJSON();
                 tray.user = _.omit(tray.user, 'password') ;
                 return callback(null, tray);
-
             }).catch(function(err){
                 console.log(err);
                 return callback(err);

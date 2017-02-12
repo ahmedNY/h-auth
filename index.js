@@ -1,12 +1,16 @@
 var u = require('./utils');
-var l = require('./logger');
-var _ = require('lodash');
 var fs = require('fs');
 var glob = require('glob');
 var seneca = require('seneca')();
 var global_config = require('config');
 var mainController = require('./lib/controller');
 var models = require("./models");
+var path = require('path');
+
+global.appRoot = path.resolve(__dirname);
+global._ = require('lodash');
+global.l = require('./logger');
+global.promise = require('bluebird');
 
 var configs = [];
 var controllers = [];
